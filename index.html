@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SOLVIX | Smart Food Waste Management</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f8f5;
+    color:#183b2a;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:245px;
+    height:100vh;
+    background:#0c3b28;
+    color:white;
+    padding:25px 15px;
+    z-index:100;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:5px;
+    letter-spacing:2px;
+}
+
+.logo-sub{
+    text-align:center;
+    font-size:11px;
+    color:#bde7cb;
+    margin-bottom:30px;
+}
+
+.nav-btn{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:#dcefe3;
+    padding:14px 15px;
+    margin:4px 0;
+    text-align:left;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.2s;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#1d6b49;
+    color:white;
+}
+
+.nav-icon{
+    width:28px;
+    display:inline-block;
+}
+
+.sidebar-bottom{
+    position:absolute;
+    bottom:20px;
+    left:15px;
+    right:15px;
+}
+
+.reset-btn{
+    width:100%;
+    padding:11px;
+    border:1px solid #71b58f;
+    background:transparent;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.reset-btn:hover{
+    background:#1d6b49;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:245px;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.topbar h1{
+    font-size:27px;
+}
+
+.date{
+    color:#687e72;
+    font-size:14px;
+}
+
+/* SECTIONS */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    border:1px solid #e2eee6;
+}
+
+.card-title{
+    color:#6c8176;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.card-number{
+    font-size:29px;
+    font-weight:bold;
+    color:#0c5b38;
+}
+
+.card-small{
+    font-size:12px;
+    margin-top:7px;
+    color:#6c8176;
+}
+
+/* GRID */
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:white;
+    border-radius:15px;
+    padding:22px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+    margin-bottom:20px;
+}
+
+.panel h2{
+    margin-bottom:18px;
+    font-size:19px;
+}
+
+/* FORMS */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:13px;
+    margin-bottom:6px;
+    color:#4f675a;
+}
+
+input,
+select{
+    padding:12px;
+    border:1px solid #ccdcd2;
+    border-radius:8px;
+    outline:none;
+    background:white;
+}
+
+input:focus,
+select:focus{
+    border-color:#2b895c;
+}
+
+.primary-btn{
+    background:#13834e;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary-btn:hover{
+    background:#0e6d40;
+}
+
+.secondary-btn{
+    background:#e9f5ee;
+    color:#11653b;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.danger-btn{
+    background:#ffe9e7;
+    color:#b6342b;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* TABLE */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:13px 10px;
+    border-bottom:1px solid #e5eee8;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    color:#668072;
+    font-size:12px;
+}
+
+/* STATUS */
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.safe{
+    background:#dff5e7;
+    color:#16703e;
+}
+
+.warning{
+    background:#fff1d5;
+    color:#98640c;
+}
+
+.unsafe{
+    background:#ffe1df;
+    color:#ae332b;
+}
+
+.pending{
+    background:#e8eefc;
+    color:#37558f;
+}
+
+/* AI */
+
+.ai-box{
+    background:linear-gradient(135deg,#e8f8ed,#f8fff9);
+    border:1px solid #c9e8d3;
+    border-radius:13px;
+    padding:20px;
+}
+
+.ai-result{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:white;
+    border-radius:12px;
+    border-left:5px solid #16854e;
+}
+
+.ai-number{
+    font-size:34px;
+    font-weight:bold;
+    color:#08703c;
+}
+
+/* NGO */
+
+.ngo-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.ngo-card{
+    border:1px solid #dce9e0;
+    padding:17px;
+    border-radius:12px;
+    background:#fbfefc;
+}
+
+.ngo-card h3{
+    margin-bottom:8px;
+}
+
+.ngo-card p{
+    font-size:12px;
+    color:#63756b;
+    margin-bottom:8px;
+}
+
+.match{
+    color:#16804b;
+    font-weight:bold;
+    font-size:13px;
+}
+
+/* TRACKING */
+
+.timeline{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    margin:40px 10px;
+}
+
+.timeline:before{
+    content:"";
+    position:absolute;
+    top:17px;
+    left:0;
+    right:0;
+    height:4px;
+    background:#dce8df;
+    z-index:0;
+}
+
+.timeline-step{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    width:110px;
+}
+
+.circle{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#dce8df;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.timeline-step.done .circle{
+    background:#16834d;
+    color:white;
+}
+
+.timeline-step p{
+    font-size:10px;
+    margin-top:8px;
+    color:#63756b;
+}
+
+/* SAFETY */
+
+.check-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.check-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    background:#f6faf7;
+    border-radius:8px;
+}
+
+.check-item input{
+    width:18px;
+    height:18px;
+}
+
+/* IMPACT */
+
+.impact-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.impact-card{
+    padding:25px;
+    border-radius:15px;
+    background:white;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.impact-icon{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.impact-value{
+    font-size:32px;
+    font-weight:bold;
+    color:#11804b;
+}
+
+/* CHART */
+
+.chart{
+    height:220px;
+    display:flex;
+    align-items:end;
+    justify-content:space-around;
+    gap:15px;
+    padding:20px;
+}
+
+.bar-container{
+    height:180px;
+    display:flex;
+    align-items:end;
+    flex-direction:column;
+    justify-content:end;
+    text-align:center;
+}
+
+.bar{
+    width:35px;
+    background:#2c9863;
+    border-radius:5px 5px 0 0;
+    min-height:10px;
+}
+
+.bar-label{
+    font-size:10px;
+    margin-top:7px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#123f2c;
+    color:white;
+    padding:15px 20px;
+    border-radius:9px;
+    display:none;
+    z-index:999;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+.toast.show{
+    display:block;
+    animation:fade .3s;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .ngo-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .impact-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:750px){
+    .sidebar{
+        width:70px;
+        padding:15px 8px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .logo-sub{
+        display:none;
+    }
+
+    .nav-btn{
+        text-align:center;
+        padding:13px 5px;
+    }
+
+    .nav-text{
+        display:none;
+    }
+
+    .nav-icon{
+        width:auto;
+    }
+
+    .main{
+        margin-left:70px;
+        padding:15px;
+    }
+
+    .cards,
+    .grid-2,
+    .form-grid,
+    .ngo-grid,
+    .impact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .timeline{
+        overflow-x:auto;
+        justify-content:flex-start;
+        gap:25px;
+    }
+
+    .timeline:before{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">SOLVIX</div>
+    <div class="logo-sub">
+        SMART FOOD WASTE ECOSYSTEM
+    </div>
+
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-text">Dashboard</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('addfood',this)">
+        <span class="nav-icon">＋</span>
+        <span class="nav-text">Add Food</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('prediction',this)">
+        <span class="nav-icon">✦</span>
+        <span class="nav-text">AI Prediction</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('safety',this)">
+        <span class="nav-icon">✓</span>
+        <span class="nav-text">Food Safety</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('redistribute',this)">
+        <span class="nav-icon">♻</span>
+        <span class="nav-text">Redistribute</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('tracking',this)">
+        <span class="nav-icon">➜</span>
+        <span class="nav-text">Track Pickup</span>
+    </button>
+
+    <button class="nav-btn" onclick="showPage('impact',this)">
+        <span class="nav-icon">◉</span>
+        <span class="nav-text">Impact</span>
+    </button>
+
+    <div class="sidebar-bottom">
+        <button class="reset-btn" onclick="resetDemo()">
+            ↻ <span class="nav-text">Reset Demo</span>
+        </button>
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="topbar">
+        <div>
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="date" id="todayDate"></div>
+        </div>
+
+        <div>
+            <b>● System Online</b>
+        </div>
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="page active">
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-title">TODAY'S PREPARED</div>
+                <div class="card-number" id="preparedTotal">120 kg</div>
+                <div class="card-small">Food prepared</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">CONSUMED</div>
+                <div class="card-number" id="consumedTotal">90 kg</div>
+                <div class="card-small">Estimated consumption</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">SURPLUS</div>
+                <div class="card-number" id="surplusTotal">30 kg</div>
+                <div class="card-small">Available for checking</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">REDISTRIBUTED</div>
+                <div class="card-number" id="redistributedTotal">15 kg</div>
+                <div class="card-small">Food successfully rescued</div>
+            </div>
+
+        </div>
+
+
+        <div class="grid-2">
+
+            <div class="panel">
+
+                <h2>AI Recommendation</h2>
+
+                <div class="ai-box">
+
+                    <h3>Tomorrow's preparation suggestion</h3>
+
+                    <p style="margin-top:8px;font-size:13px;color:#62766a;">
+                        Based on recent consumption patterns, SOLVIX
+                        can help reduce unnecessary preparation.
+                    </p>
+
+                    <br>
+
+                    <b>Recommended preparation:</b>
+
+                    <div class="ai-number" id="dashboardPrediction">
+                        105 kg
+                    </div>
+
+                    <p style="font-size:12px;color:#64766b;">
+                        Estimated reduction: <b>15 kg</b>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2>Food Waste Trend</h2>
+
+                <div class="chart" id="wasteChart"></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>Recent Food Records</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Food</th>
+                        <th>Prepared</th>
+                        <th>Remaining</th>
+                        <th>Safety</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="foodTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADD FOOD -->
+
+    <section id="addfood" class="page">
+
+        <div class="panel">
+
+            <h2>Record Today's Food</h2>
+
+            <p style="font-size:13px;color:#65776d;margin-bottom:20px;">
+                Enter food preparation and remaining quantity.
+                SOLVIX will calculate potential surplus.
+            </p>
+
+            <form id="foodForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Food Name</label>
+                        <input id="foodName" required
+                        placeholder="Example: Rice">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="foodCategory">
+                            <option>Cooked Meal</option>
+                            <option>Rice</option>
+                            <option>Vegetables</option>
+                            <option>Dal / Curry</option>
+                            <option>Bakery</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantity Prepared (kg)</label>
+                        <input id="preparedQty" type="number"
+                        min="0" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantity Remaining (kg)</label>
+                        <input id="remainingQty" type="number"
+                        min="0" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Expected People Served</label>
+                        <input id="people" type="number"
+                        min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preparation Time</label>
+                        <input id="prepTime" type="time" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Storage Condition</label>
+                        <select id="storage">
+                            <option>Refrigerated</option>
+                            <option>Hot Holding</option>
+                            <option>Covered / Clean</option>
+                            <option>Room Temperature</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Food Condition</label>
+                        <select id="condition">
+                            <option>Good</option>
+                            <option>Needs Verification</option>
+                            <option>Not Suitable</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+
+                        <button class="primary-btn" type="submit">
+                            + Save Food Record
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>How SOLVIX Works</h2>
+
+            <div class="grid-2">
+
+                <div>
+                    <h3>1. Record</h3>
+                    <p style="font-size:13px;margin-top:7px;">
+                        Kitchen records prepared and remaining food.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>2. Check</h3>
+                    <p style="font-size:13px;margin-top:7px;">
+                        Safety information is recorded before redistribution.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>3. Match</h3>
+                    <p style="font-size:13px;margin-top:7px;">
+                        Suitable surplus can be matched with registered NGOs.
+                    </p>
+                </div>
+
+                <div>
+                    <h3>4. Measure</h3>
+                    <p style="font-size:13px;margin-top:7px;">
+                        SOLVIX calculates rescued food and impact.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- AI PREDICTION -->
+
+    <section id="prediction" class="page">
+
+        <div class="panel">
+
+            <h2>AI Food Demand Prediction</h2>
+
+            <div class="ai-box">
+
+                <p style="font-size:13px;color:#60746a;margin-bottom:20px;">
+                    Enter tomorrow's expected number of people.
+                    This prototype uses recent consumption data to
+                    generate a preparation recommendation.
+                </p>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Expected People</label>
+                        <input id="predictionPeople"
+                        type="number"
+                        placeholder="Example: 500">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Average Food Consumption / Person (kg)</label>
+                        <input id="consumptionPerPerson"
+                        type="number"
+                        value="0.20"
+                        step="0.01">
+                    </div>
+
+                </div>
+
+                <br>
+
+                <button class="primary-btn"
+                onclick="runPrediction()">
+                    ✦ Generate AI Prediction
+                </button>
+
+
+                <div id="predictionResult" class="ai-result">
+
+                    <p>Recommended preparation</p>
+
+                    <div class="ai-number"
+                    id="recommendedFood">
+                        100 kg
+                    </div>
+
+                    <br>
+
+                    <p>
+                        Estimated excess avoided:
+                        <b id="avoidedFood">0 kg</b>
+                    </p>
+
+                    <p style="margin-top:8px;">
+                        Estimated cost saving:
+                        <b id="costSaving">₹0</b>
+                    </p>
+
+                    <p style="margin-top:15px;font-size:11px;color:#738278;">
+                        Prototype note: this is demonstration logic.
+                        A production system can use historical kitchen
+                        data and a trained ML model for prediction.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>Prediction Process</h2>
+
+            <div class="grid-2">
+
+                <div class="card">
+                    <h3>Historical Data</h3>
+                    <p class="card-small">
+                        Previous preparation and consumption records.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Demand</h3>
+                    <p class="card-small">
+                        Expected number of people.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>AI Model</h3>
+                    <p class="card-small">
+                        Predicts approximate food requirement.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Recommendation</h3>
+                    <p class="card-small">
+                        Helps kitchens prepare closer to actual demand.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SAFETY -->
+
+    <section id="safety" class="page">
+
+        <div class="panel">
+
+            <h2>Food Safety Screening</h2>
+
+            <p style="font-size:13px;color:#65766c;margin-bottom:20px;">
+                Complete the checklist before requesting redistribution.
+                SOLVIX assists with screening and traceability; it does
+                not replace qualified food-safety decisions or applicable
+                food-safety requirements.
+            </p>
+
+            <div class="check-list">
+
+                <label class="check-item">
+                    <input type="checkbox" class="safetyCheck">
+                    Preparation time has been recorded
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox" class="safetyCheck">
+                    Food has been stored appropriately
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox" class="safetyCheck">
+                    Food is within the applicable redistribution period
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox" class="safetyCheck">
+                    Food condition has been visually checked
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox" class="safetyCheck">
+                    Human verification completed
+                </label>
+
+            </div>
+
+            <br>
+
+            <button class="primary-btn"
+            onclick="checkSafety()">
+                ✓ Complete Safety Check
+            </button>
+
+            <div id="safetyResult"
+            style="display:none;margin-top:20px;padding:15px;border-radius:10px;">
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>Safety Status</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Food</th>
+                        <th>Condition</th>
+                        <th>Storage</th>
+                        <th>Screening</th>
+                    </tr>
+                </thead>
+
+                <tbody id="safetyTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- REDISTRIBUTE -->
+
+    <section id="redistribute" class="page">
+
+        <div class="panel">
+
+            <h2>Available Surplus Food</h2>
+
+            <div id="surplusList"></div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>Suggested NGO Matches</h2>
+
+            <p style="font-size:13px;color:#68786e;margin-bottom:18px;">
+                Demo NGO matching based on food requirement,
+                capacity and pickup availability.
+            </p>
+
+            <div class="ngo-grid">
+
+                <div class="ngo-card">
+
+                    <h3>Helping Hands NGO</h3>
+
+                    <p>📍 3.2 km away</p>
+
+                    <p>Needs: Cooked meals</p>
+
+                    <p>Capacity: 50 kg</p>
+
+                    <div class="match">96% Match</div>
+
+                    <br>
+
+                    <button class="primary-btn"
+                    onclick="requestPickup('Helping Hands NGO',96)">
+                        Request Pickup
+                    </button>
+
+                </div>
+
+
+                <div class="ngo-card">
+
+                    <h3>Food For All</h3>
+
+                    <p>📍 5.8 km away</p>
+
+                    <p>Needs: Rice / meals</p>
+
+                    <p>Capacity: 80 kg</p>
+
+                    <div class="match">91% Match</div>
+
+                    <br>
+
+                    <button class="primary-btn"
+                    onclick="requestPickup('Food For All',91)">
+                        Request Pickup
+                    </button>
+
+                </div>
+
+
+                <div class="ngo-card">
+
+                    <h3>Care & Share</h3>
+
+                    <p>📍 7.1 km away</p>
+
+                    <p>Needs: Vegetarian meals</p>
+
+                    <p>Capacity: 40 kg</p>
+
+                    <div class="match">87% Match</div>
+
+                    <br>
+
+                    <button class="primary-btn"
+                    onclick="requestPickup('Care & Share',87)">
+                        Request Pickup
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TRACKING -->
+
+    <section id="tracking" class="page">
+
+        <div class="panel">
+
+            <h2>Pickup Tracking</h2>
+
+            <div id="noPickup"
+            style="padding:20px;background:#f5f8f6;border-radius:10px;">
+                No active pickup request.
+            </div>
+
+            <div id="pickupContent" style="display:none;">
+
+                <p>
+                    Request ID:
+                    <b id="requestId"></b>
+                </p>
+
+                <p style="margin-top:8px;">
+                    NGO:
+                    <b id="pickupNgo"></b>
+                </p>
+
+                <div class="timeline">
+
+                    <div class="timeline-step done"
+                    id="step1">
+                        <div class="circle">1</div>
+                        <p>Food Added</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step2">
+                        <div class="circle">2</div>
+                        <p>Safety Verified</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step3">
+                        <div class="circle">3</div>
+                        <p>NGO Requested</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step4">
+                        <div class="circle">4</div>
+                        <p>NGO Accepted</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step5">
+                        <div class="circle">5</div>
+                        <p>Pickup Assigned</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step6">
+                        <div class="circle">6</div>
+                        <p>Collected</p>
+                    </div>
+
+                    <div class="timeline-step"
+                    id="step7">
+                        <div class="circle">7</div>
+                        <p>Delivered</p>
+                    </div>
+
+                </div>
+
+                <h3 id="pickupStatus">
+                    NGO Request Created
+                </h3>
+
+                <br>
+
+                <button class="primary-btn"
+                onclick="advancePickup()">
+                    Advance Status →
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- IMPACT -->
+
+    <section id="impact" class="page">
+
+        <div class="impact-grid">
+
+            <div class="impact-card">
+
+                <div class="impact-icon">🍚</div>
+
+                <div class="impact-value"
+                id="impactFood">
+                    15 kg
+                </div>
+
+                <p>Food Rescued</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="impact-icon">🍽️</div>
+
+                <div class="impact-value"
+                id="impactMeals">
+                    75
+                </div>
+
+                <p>Meals Supported</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="impact-icon">♻️</div>
+
+                <div class="impact-value"
+                id="impactWaste">
+                    15 kg
+                </div>
+
+                <p>Waste Avoided</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="impact-icon">💰</div>
+
+                <div class="impact-value"
+                id="impactCost">
+                    ₹750
+                </div>
+
+                <p>Estimated Cost Saved</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="impact-icon">🤝</div>
+
+                <div class="impact-value"
+                id="impactRequests">
+                    1
+                </div>
+
+                <p>Redistribution Requests</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="impact-icon">🌱</div>
+
+                <div class="impact-value">
+                    17
+                </div>
+
+                <p>SDG 2 & SDG 12 Alignment</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel" style="margin-top:20px;">
+
+            <h2>SOLVIX Impact</h2>
+
+            <p style="line-height:1.7;font-size:14px;">
+
+                SOLVIX aims to reduce avoidable food waste by helping
+                institutional kitchens make better preparation decisions,
+                identify surplus food, perform safety screening,
+                connect suitable surplus with registered redistribution
+                partners, and measure the resulting impact.
+
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* -------------------------
+   DATA
+------------------------- */
+
+let foodRecords = JSON.parse(
+    localStorage.getItem("solvixFoodRecords")
+) || [
+
+    {
+        name:"Rice",
+        category:"Rice",
+        prepared:50,
+        remaining:12,
+        storage:"Refrigerated",
+        condition:"Good",
+        safety:"Safe"
+    },
+
+    {
+        name:"Dal",
+        category:"Dal / Curry",
+        prepared:30,
+        remaining:8,
+        storage:"Hot Holding",
+        condition:"Good",
+        safety:"Safe"
+    },
+
+    {
+        name:"Vegetable Curry",
+        category:"Vegetables",
+        prepared:40,
+        remaining:10,
+        storage:"Covered / Clean",
+        condition:"Good",
+        safety:"Safe"
+    }
+
+];
+
+
+let pickup = JSON.parse(
+    localStorage.getItem("solvixPickup")
+) || null;
+
+
+let redistributed = Number(
+    localStorage.getItem("solvixRedistributed")
+) || 15;
+
+
+/* -------------------------
+   DATE
+------------------------- */
+
+document.getElementById("todayDate").innerText =
+    new Date().toLocaleDateString(
+        "en-IN",
+        {
+            weekday:"long",
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        }
+    );
+
+
+/* -------------------------
+   PAGE NAVIGATION
+------------------------- */
+
+function showPage(pageId,button){
+
+    document.querySelectorAll(".page")
+    .forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId)
+    .classList.add("active");
+
+
+    document.querySelectorAll(".nav-btn")
+    .forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+
+    const titles={
+        dashboard:"Dashboard",
+        addfood:"Add Food",
+        prediction:"AI Prediction",
+        safety:"Food Safety",
+        redistribute:"Redistribute Food",
+        tracking:"Track Pickup",
+        impact:"Impact Dashboard"
+    };
+
+    document.getElementById("pageTitle")
+    .innerText=titles[pageId];
+
+    updateAll();
+
+}
+
+
+/* -------------------------
+   TOAST
+------------------------- */
+
+function showToast(message){
+
+    const toast=document.getElementById("toast");
+
+    toast.innerText=message;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },3000);
+
+}
+
+
+/* -------------------------
+   SAVE DATA
+------------------------- */
+
+function saveData(){
+
+    localStorage.setItem(
+        "solvixFoodRecords",
+        JSON.stringify(foodRecords)
+    );
+
+    localStorage.setItem(
+        "solvixPickup",
+        JSON.stringify(pickup)
+    );
+
+    localStorage.setItem(
+        "solvixRedistributed",
+        redistributed
+    );
+
+}
+
+
+/* -------------------------
+   FOOD FORM
+------------------------- */
+
+document.getElementById("foodForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+
+    const name=
+        document.getElementById("foodName").value;
+
+    const category=
+        document.getElementById("foodCategory").value;
+
+    const prepared=
+        Number(document.getElementById("preparedQty").value);
+
+    const remaining=
+        Number(document.getElementById("remainingQty").value);
+
+    const storage=
+        document.getElementById("storage").value;
+
+    const condition=
+        document.getElementById("condition").value;
+
+
+    if(remaining>prepared){
+
+        showToast(
+            "Remaining quantity cannot exceed prepared quantity."
+        );
+
+        return;
+    }
+
+
+    let safety="Needs Verification";
+
+    if(
+        condition==="Good" &&
+        storage!=="Room Temperature"
+    ){
+        safety="Safe";
+    }
+
+    if(condition==="Not Suitable"){
+        safety="Do Not Redistribute";
+    }
+
+
+    foodRecords.unshift({
+
+        name,
+        category,
+        prepared,
+        remaining,
+        storage,
+        condition,
+        safety
+
+    });
+
+
+    saveData();
+
+    this.reset();
+
+    showToast(
+        `${name} added successfully.`
+    );
+
+    updateAll();
+
+});
+
+
+/* -------------------------
+   DASHBOARD
+------------------------- */
+
+function updateDashboard(){
+
+    let prepared=
+        foodRecords.reduce(
+            (sum,item)=>sum+Number(item.prepared),
+            0
+        );
+
+    let surplus=
+        foodRecords.reduce(
+            (sum,item)=>sum+Number(item.remaining),
+            0
+        );
+
+    let consumed=
+        prepared-surplus;
+
+
+    document.getElementById("preparedTotal")
+    .innerText=prepared.toFixed(1)+" kg";
+
+
+    document.getElementById("consumedTotal")
+    .innerText=consumed.toFixed(1)+" kg";
+
+
+    document.getElementById("surplusTotal")
+    .innerText=surplus.toFixed(1)+" kg";
+
+
+    document.getElementById("redistributedTotal")
+    .innerText=redistributed.toFixed(1)+" kg";
+
+
+    const table=
+        document.getElementById("foodTable");
+
+    table.innerHTML="";
+
+
+    foodRecords.slice(0,8)
+    .forEach(item=>{
+
+        let status=
+            item.remaining>0
+            ?"Surplus Available"
+            :"Consumed";
+
+        let statusClass=
+            item.remaining>0
+            ?"warning"
+            :"safe";
+
+
+        let safetyClass=
+            item.safety==="Safe"
+            ?"safe"
+            :
+            item.safety==="Do Not Redistribute"
+            ?"unsafe"
+            :"warning";
+
+
+        table.innerHTML+=`
+
+        <tr>
+
+            <td><b>${item.name}</b></td>
+
+            <td>${item.prepared} kg</td>
+
+            <td>${item.remaining} kg</td>
+
+            <td>
+                <span class="status ${safetyClass}">
+                    ${item.safety}
+                </span>
+            </td>
+
+            <td>
+                <span class="status ${statusClass}">
+                    ${status}
+                </span>
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+
+    document.getElementById("dashboardPrediction")
+    .innerText=
+        Math.max(prepared-surplus*0.5,0)
+        .toFixed(0)+" kg";
+
+
+    createChart();
+
+}
+
+
+/* -------------------------
+   CHART
+------------------------- */
+
+function createChart(){
+
+    const chart=
+        document.getElementById("wasteChart");
+
+    chart.innerHTML="";
+
+
+    const values=[
+        35,
+        28,
+        32,
+        25,
+        22,
+        18,
+        15
+    ];
+
+
+    const days=[
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Today"
+    ];
+
+
+    values.forEach((value,index)=>{
+
+        const container=
+            document.createElement("div");
+
+        container.className=
+            "bar-container";
+
+
+        const bar=
+            document.createElement("div");
+
+        bar.className="bar";
+
+        bar.style.height=
+            (value*4.5)+"px";
+
+
+        const label=
+            document.createElement("div");
+
+        label.className="bar-label";
+
+        label.innerText=
+            days[index];
+
+
+        container.appendChild(bar);
+        container.appendChild(label);
+
+        chart.appendChild(container);
+
+    });
+
+}
+
+
+/* -------------------------
+   AI PREDICTION
+------------------------- */
+
+function runPrediction(){
+
+    const people=
+        Number(
+            document.getElementById(
+                "predictionPeople"
+            ).value
+        );
+
+    const perPerson=
+        Number(
+            document.getElementById(
+                "consumptionPerPerson"
+            ).value
+        );
+
+
+    if(!people || !perPerson){
+
+        showToast(
+            "Please enter expected people and consumption."
+        );
+
+        return;
+    }
+
+
+    const demand=
+        people*perPerson;
+
+
+    const recommended=
+        demand*1.05;
+
+
+    const avoided=
+        demand*0.15;
+
+
+    const saving=
+        avoided*50;
+
+
+    document.getElementById(
+        "recommendedFood"
+    ).innerText=
+        recommended.toFixed(1)+" kg";
+
+
+    document.getElementById(
+        "avoidedFood"
+    ).innerText=
+        avoided.toFixed(1)+" kg";
+
+
+    document.getElementById(
+        "costSaving"
+    ).innerText=
+        "₹"+Math.round(saving);
+
+
+    document.getElementById(
+        "predictionResult"
+    ).style.display="block";
+
+
+    document.getElementById(
+        "dashboardPrediction"
+    ).innerText=
+        recommended.toFixed(0)+" kg";
+
+
+    showToast(
+        "AI prediction generated."
+    );
+
+}
+
+
+/* -------------------------
+   SAFETY
+------------------------- */
+
+function checkSafety(){
+
+    const checks=
+        document.querySelectorAll(
+            ".safetyCheck"
+        );
+
+
+    const completed=
+        [...checks].every(
+            checkbox=>checkbox.checked
+        );
+
+
+    const result=
+        document.getElementById(
+            "safetyResult"
+        );
+
+
+    result.style.display="block";
+
+
+    if(completed){
+
+        result.style.background="#e1f5e8";
+        result.style.color="#146a3b";
+
+        result.innerHTML=
+            "<b>✓ Screening checklist completed.</b><br>" +
+            "Final redistribution should still follow " +
+            "applicable food-safety requirements and human verification.";
+
+        showToast(
+            "Safety checklist completed."
+        );
+
+    }else{
+
+        result.style.background="#fff2d9";
+        result.style.color="#8b650f";
+
+        result.innerHTML=
+            "<b>⚠ Verification incomplete.</b><br>" +
+            "Complete all checklist items before requesting redistribution.";
+
+        showToast(
+            "Safety verification is incomplete."
+        );
+
+    }
+
+}
+
+
+/* -------------------------
+   SAFETY TABLE
+------------------------- */
+
+function updateSafety(){
+
+    const table=
+        document.getElementById(
+            "safetyTable"
+        );
+
+    table.innerHTML="";
+
+
+    foodRecords.forEach(item=>{
+
+        let cls=
+            item.safety==="Safe"
+            ?"safe"
+            :
+            item.safety==="Do Not Redistribute"
+            ?"unsafe"
+            :"warning";
+
+
+        table.innerHTML+=`
+
+        <tr>
+
+            <td>${item.name}</td>
+
+            <td>${item.condition}</td>
+
+            <td>${item.storage}</td>
+
+            <td>
+                <span class="status ${cls}">
+                    ${item.safety}
+                </span>
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* -------------------------
+   SURPLUS
+------------------------- */
+
+function updateSurplus(){
+
+    const list=
+        document.getElementById(
+            "surplusList"
+        );
+
+
+    const surplus=
+        foodRecords.filter(
+            item=>
+                item.remaining>0 &&
+                item.safety!=="Do Not Redistribute"
+        );
+
+
+    if(surplus.length===0){
+
+        list.innerHTML=
+            `<p style="padding:15px;background:#f5f8f6;border-radius:8px;">
+                No suitable surplus food available.
+            </p>`;
+
+        return;
+    }
+
+
+    list.innerHTML="";
+
+
+    surplus.forEach(item=>{
+
+        list.innerHTML+=`
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px;
+            border:1px solid #dce9e0;
+            border-radius:10px;
+            margin-bottom:10px;
+        ">
+
+            <div>
+
+                <b>${item.name}</b>
+
+                <p style="
+                    font-size:12px;
+                    color:#687a70;
+                    margin-top:5px;
+                ">
+                    ${item.remaining} kg available
+                </p>
+
+            </div>
+
+            <span class="status ${
+                item.safety==="Safe"
+                ?"safe"
+                :"warning"
+            }">
+                ${item.safety}
+            </span>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* -------------------------
+   REQUEST PICKUP
+------------------------- */
+
+function requestPickup(ngo,score){
+
+    const surplus=
+        foodRecords
+        .filter(
+            item=>
+                item.remaining>0 &&
+                item.safety!=="Do Not Redistribute"
+        )
+        .reduce(
+            (sum,item)=>sum+Number(item.remaining),
+            0
+        );
+
+
+    if(surplus<=0){
+
+        showToast(
+            "No surplus food available."
+        );
+
+        return;
+    }
+
+
+    pickup={
+
+        id:"SOLVIX-"+Math.floor(
+            100000+Math.random()*900000
+        ),
+
+        ngo:ngo,
+
+        score:score,
+
+        quantity:surplus,
+
+        step:3
+
+    };
+
+
+    saveData();
+
+
+    showToast(
+        `Pickup requested from ${ngo}.`
+    );
+
+
+    updateAll();
+
+
+    const trackingButton=
+        [...document.querySelectorAll(".nav-btn")]
+        .find(btn=>
+            btn.innerText.includes("Track Pickup")
+        );
+
+
+    showPage(
+        "tracking",
+        trackingButton
+    );
+
+}
+
+
+/* -------------------------
+   TRACKING
+------------------------- */
+
+function updateTracking(){
+
+    const noPickup=
+        document.getElementById("noPickup");
+
+    const content=
+        document.getElementById("pickupContent");
+
+
+    if(!pickup){
+
+        noPickup.style.display="block";
+        content.style.display="none";
+
+        return;
+    }
+
+
+    noPickup.style.display="none";
+    content.style.display="block";
+
+
+    document.getElementById(
+        "requestId"
+    ).innerText=pickup.id;
+
+
+    document.getElementById(
+        "pickupNgo"
+    ).innerText=
+        pickup.ngo;
+
+
+    const statuses=[
+
+        "Food Added",
+
+        "Safety Verified",
+
+        "NGO Request Created",
+
+        "NGO Accepted",
+
+        "Pickup Assigned",
+
+        "Food Collected",
+
+        "Food Delivered"
+
+    ];
+
+
+    document.getElementById(
+        "pickupStatus"
+    ).innerText=
+        statuses[pickup.step-1];
+
+
+    for(let i=1;i<=7;i++){
+
+        const step=
+            document.getElementById(
+                "step"+i
+            );
+
+        if(i<=pickup.step){
+
+            step.classList.add("done");
+
+        }else{
+
+            step.classList.remove("done");
+
+        }
+
+    }
+
+
+    const button=
+        content.querySelector(
+            ".primary-btn"
+        );
+
+
+    if(pickup.step>=7){
+
+        button.innerText=
+            "✓ Delivery Completed";
+
+        button.disabled=true;
+
+        button.style.opacity=".6";
+
+    }else{
+
+        button.innerText=
+            "Advance Status →";
+
+        button.disabled=false;
+
+        button.style.opacity="1";
+
+    }
+
+}
+
+
+/* -------------------------
+   ADVANCE PICKUP
+------------------------- */
+
+function advancePickup(){
+
+    if(!pickup) return;
+
+
+    if(pickup.step<7){
+
+        pickup.step++;
+
+        if(pickup.step===7){
+
+            redistributed+=
+                pickup.quantity;
+
+            foodRecords.forEach(item=>{
+                item.remaining=0;
+            });
+
+            saveData();
+
+            showToast(
+                "Food successfully delivered!"
+            );
+
+        }else{
+
+            showToast(
+                "Pickup status updated."
+            );
+
+        }
+
+        saveData();
+
+        updateAll();
+
+    }
+
+}
+
+
+/* -------------------------
+   IMPACT
+------------------------- */
+
+function updateImpact(){
+
+    const food=
+        redistributed;
+
+
+    const meals=
+        Math.round(food/0.2);
+
+
+    const cost=
+        Math.round(food*50);
+
+
+    document.getElementById(
+        "impactFood"
+    ).innerText=
+        food.toFixed(1)+" kg";
+
+
+    document.getElementById(
+        "impactMeals"
+    ).innerText=
+        meals;
+
+
+    document.getElementById(
+        "impactWaste"
+    ).innerText=
+        food.toFixed(1)+" kg";
+
+
+    document.getElementById(
+        "impactCost"
+    ).innerText=
+        "₹"+cost;
+
+
+    document.getElementById(
+        "impactRequests"
+    ).innerText=
+        pickup ? "1" : "0";
+
+}
+
+
+/* -------------------------
+   UPDATE EVERYTHING
+------------------------- */
+
+function updateAll(){
+
+    updateDashboard();
+
+    updateSafety();
+
+    updateSurplus();
+
+    updateTracking();
+
+    updateImpact();
+
+}
+
+
+/* -------------------------
+   RESET DEMO
+------------------------- */
+
+function resetDemo(){
+
+    const confirmReset=
+        confirm(
+            "Reset SOLVIX demo data?"
+        );
+
+
+    if(!confirmReset) return;
+
+
+    localStorage.removeItem(
+        "solvixFoodRecords"
+    );
+
+    localStorage.removeItem(
+        "solvixPickup"
+    );
+
+    localStorage.removeItem(
+        "solvixRedistributed"
+    );
+
+
+    location.reload();
+
+}
+
+
+/* -------------------------
+   START
+------------------------- */
+
+updateAll();
+
+</script>
+
+</body>
+</html>
